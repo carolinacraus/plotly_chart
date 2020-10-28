@@ -18,6 +18,8 @@ function init() {
     var firstSample = sampleNames[0];
     buildCharts(firstSample);
     buildMetadata(firstSample);
+
+
   });
 }
 
@@ -65,6 +67,7 @@ function buildCharts(sample) {
     samples_array = samples.filter(sampleObject => sampleObject.id == sample);
     //  5. Create a variable that holds the first sample in the array.
     var first_sample = samples_array[0];  
+    //var metadata = samples.metadata;
 
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var otu_ids = first_sample.otu_ids;
@@ -103,6 +106,7 @@ function buildCharts(sample) {
        x: otu_ids,
        y: sample_values, 
        text: otu_labels,
+       type: "scatter",
        mode: 'markers',
        marker: {
          color: otu_ids,
@@ -121,7 +125,26 @@ function buildCharts(sample) {
 
     // 3. Use Plotly to plot the data with the layout.
     Plotly.newPlot("bubble", bubbleData, bubbleLayout)
+    // 4. Create the trace for the gauge chart.
+    
+    var trace_gauge = [{
+      domain: {x: [0, 1], y: [0,1]},
+      value: first_sample.wfreq,
+      type: "indicator",
+      title: {text: "Belly Button Washing Frequency", font: {size: 14}},
+      mode: "gauge+number"
+
+  }];
+    console.log(first_sample);
+    var gaugeData = [trace_gauge];
+  
+    // 5. Create the layout for the gauge chart.
+    var gaugeLayout = { width: 400, height: 500, margin: {t: 0, b:0}};
+
+    // 6. Use Plotly to plot the gauge data and layout.
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout)
   });
 }
+
 
 
